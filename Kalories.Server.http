@@ -1,6 +1,19 @@
-@Kalories.Server_HostAddress = http://localhost:5092
+@host = https://localhost:7062
 
-GET {{Kalories.Server_HostAddress}}/weatherforecast/
-Accept: application/json
+POST {{host}}/register
+Content-Type: application/json
+
+{
+  "email": "prueba@test.com",
+  "password": "Prueba123!"
+}
 
 ###
+
+POST {{host}}/login
+Content-Type: application/json
+
+{
+  "email": "prueba@test.com",
+  "password": "Prueba123!"
+}
