@@ -1,0 +1,6 @@
+@Kalories.Server_HostAddress = http://localhost:5092
+
+GET {{Kalories.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
