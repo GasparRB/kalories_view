@@ -4,7 +4,7 @@ POST {{host}}/register
 Content-Type: application/json
 
 {
-  "email": "prueba@test.com",
+  "email": "consent@test2.com",
   "password": "Prueba123!"
 }
 
@@ -15,23 +15,8 @@ POST {{host}}/login
 Content-Type: application/json
 
 {
-  "email": "prueba@test.com",
+  "email": "consent@test.com",
   "password": "Prueba123!"
-}
-
-###
-
-PUT {{host}}/api/profile
-Authorization: Bearer {{login.response.body.$.accessToken}}
-Content-Type: application/json
-
-{
-  "name": "gaspar",
-  "birthDate": "1990-05-20",
-  "sex": 1,
-  "heightCm": 175,
-  "activityLevel": 2,
-  "goal": 0
 }
 
 ###
@@ -41,68 +26,34 @@ Authorization: Bearer {{login.response.body.$.accessToken}}
 
 ###
 
-POST {{host}}/api/measurements
+POST {{host}}/api/account/consent
+Authorization: Bearer {{login.response.body.$.accessToken}}
+Content-Type: application/json
+
+{"version": "1.0"}
+
+###
+
+POST {{host}}/api/account/consent
 Authorization: Bearer {{login.response.body.$.accessToken}}
 Content-Type: application/json
 
 {
-  "weightKg": 78.5,
-  "waistCm": 85
+  "version": "1.0"
 }
 
 ###
 
-GET {{host}}/api/measurements
+GET {{host}}/api/account/consent
 Authorization: Bearer {{login.response.body.$.accessToken}}
-
-###
-
-POST {{host}}/register
-Content-Type: application/json
-
-{
-  "email": "borrar@test.com",
-  "password": "Prueba123!"
-}
-
-###
-
-# @name loginBorrar
-POST {{host}}/login
-Content-Type: application/json
-
-{
-  "email": "borrar@test.com",
-  "password": "Prueba123!"
-}
 
 ###
 
 PUT {{host}}/api/profile
-Authorization: Bearer {{loginBorrar.response.body.$.accessToken}}
+Authorization: Bearer {{login.response.body.$.accessToken}}
 Content-Type: application/json
 
 {
-  "name": "Para borrar",
+  "name": "Consentimiento",
   "heightCm": 170
-}
-
-###
-
-POST {{host}}/api/measurements
-Authorization: Bearer {{loginBorrar.response.body.$.accessToken}}
-Content-Type: application/json
-
-{
-  "weightKg": 70
-}
-
-###
-
-DELETE {{host}}/api/account
-Authorization: Bearer {{loginBorrar.response.body.$.accessToken}}
-Content-Type: application/json
-
-{
-  "password": "Prueba123!"
 }

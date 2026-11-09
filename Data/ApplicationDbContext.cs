@@ -17,6 +17,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         base.OnModelCreating(builder);
 
+        builder.Entity<ApplicationUser>()
+    .Property(u => u.ConsentVersion)
+    .HasMaxLength(20);
+
         builder.Entity<UserProfile>(e =>
         {
             e.HasIndex(p => p.UserId).IsUnique();
