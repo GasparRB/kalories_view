@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Kalories.Server.Data;
@@ -18,8 +18,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         base.OnModelCreating(builder);
 
         builder.Entity<ApplicationUser>()
-    .Property(u => u.ConsentVersion)
-    .HasMaxLength(20);
+            .Property(u => u.ConsentVersion)
+            .HasMaxLength(20);
 
         builder.Entity<UserProfile>(e =>
         {
