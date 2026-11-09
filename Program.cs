@@ -1,5 +1,7 @@
 using Kalories.Server.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.BearerToken;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +20,12 @@ builder.Services.AddAuthorization();
 builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
+// TEMPORAL: solo para probar la renovación del token. Quitar después.
+//builder.Services.Configure<BearerTokenOptions>(IdentityConstants.BearerScheme, options =>
+//{
+//    options.BearerTokenExpiration = TimeSpan.FromMinutes(2);
+//});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -26,7 +34,10 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseAuthentication();
 app.UseAuthorization();
