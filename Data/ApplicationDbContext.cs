@@ -9,4 +9,15 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         : base(options)
     {
     }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+
+        builder.Entity<ApplicationUser>(b =>
+        {
+            b.Property(u => u.ConsentAcceptedAt);
+            b.Property(u => u.ConsentVersion).HasMaxLength(10);
+        });
+    }
 }
