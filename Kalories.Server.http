@@ -10,10 +10,99 @@ Content-Type: application/json
 
 ###
 
+# @name login
 POST {{host}}/login
 Content-Type: application/json
 
 {
   "email": "prueba@test.com",
+  "password": "Prueba123!"
+}
+
+###
+
+PUT {{host}}/api/profile
+Authorization: Bearer {{login.response.body.$.accessToken}}
+Content-Type: application/json
+
+{
+  "name": "gaspar",
+  "birthDate": "1990-05-20",
+  "sex": 1,
+  "heightCm": 175,
+  "activityLevel": 2,
+  "goal": 0
+}
+
+###
+
+GET {{host}}/api/profile
+Authorization: Bearer {{login.response.body.$.accessToken}}
+
+###
+
+POST {{host}}/api/measurements
+Authorization: Bearer {{login.response.body.$.accessToken}}
+Content-Type: application/json
+
+{
+  "weightKg": 78.5,
+  "waistCm": 85
+}
+
+###
+
+GET {{host}}/api/measurements
+Authorization: Bearer {{login.response.body.$.accessToken}}
+
+###
+
+POST {{host}}/register
+Content-Type: application/json
+
+{
+  "email": "borrar@test.com",
+  "password": "Prueba123!"
+}
+
+###
+
+# @name loginBorrar
+POST {{host}}/login
+Content-Type: application/json
+
+{
+  "email": "borrar@test.com",
+  "password": "Prueba123!"
+}
+
+###
+
+PUT {{host}}/api/profile
+Authorization: Bearer {{loginBorrar.response.body.$.accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Para borrar",
+  "heightCm": 170
+}
+
+###
+
+POST {{host}}/api/measurements
+Authorization: Bearer {{loginBorrar.response.body.$.accessToken}}
+Content-Type: application/json
+
+{
+  "weightKg": 70
+}
+
+###
+
+DELETE {{host}}/api/account
+Authorization: Bearer {{loginBorrar.response.body.$.accessToken}}
+Content-Type: application/json
+
+{
   "password": "Prueba123!"
 }
