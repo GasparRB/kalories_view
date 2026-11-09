@@ -4,16 +4,56 @@ POST {{host}}/register
 Content-Type: application/json
 
 {
-  "email": "prueba@test.com",
+  "email": "consent@test2.com",
   "password": "Prueba123!"
 }
 
 ###
 
+# @name login
 POST {{host}}/login
 Content-Type: application/json
 
 {
-  "email": "prueba@test.com",
+  "email": "consent@test.com",
   "password": "Prueba123!"
+}
+
+###
+
+GET {{host}}/api/profile
+Authorization: Bearer {{login.response.body.$.accessToken}}
+
+###
+
+POST {{host}}/api/account/consent
+Authorization: Bearer {{login.response.body.$.accessToken}}
+Content-Type: application/json
+
+{"version": "1.0"}
+
+###
+
+POST {{host}}/api/account/consent
+Authorization: Bearer {{login.response.body.$.accessToken}}
+Content-Type: application/json
+
+{
+  "version": "1.0"
+}
+
+###
+
+GET {{host}}/api/account/consent
+Authorization: Bearer {{login.response.body.$.accessToken}}
+
+###
+
+PUT {{host}}/api/profile
+Authorization: Bearer {{login.response.body.$.accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Consentimiento",
+  "heightCm": 170
 }
