@@ -34,6 +34,13 @@ namespace Kalories.Server.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("ConsentAcceptedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ConsentVersion")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");

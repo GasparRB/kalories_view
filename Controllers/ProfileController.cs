@@ -23,6 +23,7 @@ public class ProfileDto
 [ApiController]
 [Route("api/profile")]
 [Authorize]
+[RequireConsent]
 public class ProfileController(ApplicationDbContext db) : ControllerBase
 {
     private string UserId => User.FindFirstValue(ClaimTypes.NameIdentifier)!;

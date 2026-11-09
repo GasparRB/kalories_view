@@ -23,6 +23,7 @@ public class MeasurementDto
 [ApiController]
 [Route("api/measurements")]
 [Authorize]
+[RequireConsent]
 public class MeasurementsController(ApplicationDbContext db) : ControllerBase
 {
     private string UserId => User.FindFirstValue(ClaimTypes.NameIdentifier)!;

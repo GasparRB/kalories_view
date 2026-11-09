@@ -5,11 +5,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Kalories.Server.Controllers;
-
 [ApiController]
 [Route("api/profile/avatar")]
 [Authorize]
+[RequireConsent]
 public class AvatarController(ApplicationDbContext db, IWebHostEnvironment env) : ControllerBase
+
 {
     private const long MaxBytes = 10 * 1024 * 1024; // 10 MB
 
