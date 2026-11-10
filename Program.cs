@@ -1,14 +1,10 @@
 using Kalories.Server.Data;
+using Kalories.Server.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authentication.BearerToken;
-using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
 // Base de datos
@@ -20,15 +16,29 @@ builder.Services.AddAuthorization();
 builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-// TEMPORAL: solo para probar la renovación del token. Quitar después.
-//builder.Services.Configure<BearerTokenOptions>(IdentityConstants.BearerScheme, options =>
-//{
-//    options.BearerTokenExpiration = TimeSpan.FromMinutes(2);
-//});
+// IA para analizar platos: el proveedor se elige en la configuración (Ai:Provider)
+builder.Services.Configure<AiOptions>(builder.Configuration.GetSection("Ai"));
+
+var provider = builder.Configuration["Ai:Provider"] ?? "Gemini";
+if (provider.Equals("Claude", StringComparison.OrdinalIgnoreCase))
+{
+    builder.Services.AddHttpClient<IMealAnalyzer, ClaudeMealAnalyzer>(client =>
+    {
+        client.BaseAddress = new Uri("https://api.anthropic.com/");
+        client.Timeout = TimeSpan.FromSeconds(90);
+    });
+}
+else
+{
+    builder.Services.AddHttpClient<IMealAnalyzer, GeminiMealAnalyzer>(client =>
+    {
+        client.BaseAddress = new Uri("https://generativelanguage.googleapis.com/");
+        client.Timeout = TimeSpan.FromSeconds(90);
+    });
+}
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
