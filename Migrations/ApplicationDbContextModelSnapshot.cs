@@ -132,6 +132,90 @@ namespace Kalories.Server.Migrations
                     b.ToTable("Measurements");
                 });
 
+            modelBuilder.Entity("Kalories.Server.Data.Meal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Confidence")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("PhotoPath")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId", "CreatedAt");
+
+                    b.ToTable("Meals");
+                });
+
+            modelBuilder.Entity("Kalories.Server.Data.MealItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("CarbsG")
+                        .HasPrecision(6, 1)
+                        .HasColumnType("decimal(6,1)");
+
+                    b.Property<decimal>("FatG")
+                        .HasPrecision(6, 1)
+                        .HasColumnType("decimal(6,1)");
+
+                    b.Property<decimal>("Grams")
+                        .HasPrecision(7, 1)
+                        .HasColumnType("decimal(7,1)");
+
+                    b.Property<decimal>("Kcal")
+                        .HasPrecision(7, 1)
+                        .HasColumnType("decimal(7,1)");
+
+                    b.Property<int>("MealId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<decimal>("ProteinG")
+                        .HasPrecision(6, 1)
+                        .HasColumnType("decimal(6,1)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MealId");
+
+                    b.ToTable("MealItems");
+                });
+
             modelBuilder.Entity("Kalories.Server.Data.UserProfile", b =>
                 {
                     b.Property<int>("Id")
@@ -320,6 +404,28 @@ namespace Kalories.Server.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Kalories.Server.Data.Meal", b =>
+                {
+                    b.HasOne("Kalories.Server.Data.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Kalories.Server.Data.MealItem", b =>
+                {
+                    b.HasOne("Kalories.Server.Data.Meal", "Meal")
+                        .WithMany("Items")
+                        .HasForeignKey("MealId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Meal");
+                });
+
             modelBuilder.Entity("Kalories.Server.Data.UserProfile", b =>
                 {
                     b.HasOne("Kalories.Server.Data.ApplicationUser", "User")
@@ -380,6 +486,11 @@ namespace Kalories.Server.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Kalories.Server.Data.Meal", b =>
+                {
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }
