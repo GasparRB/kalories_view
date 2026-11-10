@@ -114,6 +114,7 @@ public class AccountController(
         catch (Exception)
         {
             // La cuenta ya está borrada; si un archivo no se puede eliminar, quedará huérfano.
+            // La cuenta ya está borrada; si el archivo no se puede eliminar, quedará huérfano.
         }
     }
 }
