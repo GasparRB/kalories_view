@@ -79,31 +79,41 @@ public class AccountController(
         if (!check.Succeeded)
             return BadRequest("Contraseña incorrecta.");
 
+        // Se apuntan las fotos antes de borrar, porque después ya no se podrán consultar.
         var avatar = await db.Profiles
             .Where(p => p.UserId == UserId)
             .Select(p => p.AvatarPath)
             .FirstOrDefaultAsync();
 
-        // El borrado en cascada elimina también el perfil y las medidas.
+        var mealPhotos = await db.Meals
+            .Where(m => m.UserId == UserId)
+            .Select(m => m.PhotoPath)
+            .ToListAsync();
+
+        // El borrado en cascada elimina también el perfil, las medidas y las comidas.
         var result = await users.DeleteAsync(user);
         if (!result.Succeeded)
             return StatusCode(StatusCodes.Status500InternalServerError, "No se pudo borrar la cuenta.");
 
-        DeleteAvatarFile(avatar);
+        DeleteFile("avatars", avatar);
+        foreach (var photo in mealPhotos)
+            DeleteFile("meals", photo);
+
         return NoContent();
     }
 
-    private void DeleteAvatarFile(string? name)
+    private void DeleteFile(string folder, string? name)
     {
         if (string.IsNullOrEmpty(name)) return;
         try
         {
-            var path = Path.Combine(env.ContentRootPath, "uploads", "avatars", Path.GetFileName(name));
+            var path = Path.Combine(env.ContentRootPath, "uploads", folder, Path.GetFileName(name));
             if (System.IO.File.Exists(path))
                 System.IO.File.Delete(path);
         }
         catch (Exception)
         {
+            // La cuenta ya está borrada; si un archivo no se puede eliminar, quedará huérfano.
             // La cuenta ya está borrada; si el archivo no se puede eliminar, quedará huérfano.
         }
     }
